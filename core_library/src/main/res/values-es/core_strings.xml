@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CoreLibrary</string>
+
+    <string name="core_waiting">Espera &#8230;</string>
+    <string name="core_required_field">campo obligatorio</string>
+    <string name="core_google_play_services_error">Este dispositivo no es compatible. Google Play Services no está instalado!</string>
+    <string name="core_runtime_permissions_txt">Para utilizar la aplicación que debe autorizar todos los consentimientos</string>
+    <string name="core_runtime_permissions_settings_txt">Para utilizar la aplicación que debe autorizar todos los consentimientos en la sección \'Permisos\'</string>
+    <string name="core_application_request">Permitir</string>
+    <string name="core_application_settings">Ajustes</string>
+
+</resources>

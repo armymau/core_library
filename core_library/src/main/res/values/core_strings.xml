@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CoreLibrary</string>
+
+    <string name="core_waiting">Waiting &#8230;</string>
+    <string name="core_required_field">field required</string>
+    <string name="core_google_play_services_error">This device is not supported. Google Play Services not installed!</string>
+    <string name="core_runtime_permissions_txt">To use this app you must authorize all permissions</string>
+    <string name="core_runtime_permissions_settings_txt">To use this app you must authorize all the consents in the \'Permissions\' section</string>
+    <string name="core_application_request">Enable</string>
+    <string name="core_application_settings">Settings</string>
+
+</resources>

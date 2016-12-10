@@ -1,0 +1,11 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="AndroidLintIconLauncherShape" enabled="true" level="INFO" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintOldTargetApi" enabled="true" level="INFO" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintShowToast" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintUnlocalizedSms" enabled="true" level="INFO" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintUseValueOf" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintWrongRegion" enabled="true" level="INFO" enabled_by_default="true" />
+  </profile>
+</component>
