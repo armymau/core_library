@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">CoreLibrary</string>
-
     <string name="core_waiting">Attendre &#8230;</string>
     <string name="core_required_field">champ obligatoire</string>
     <string name="core_google_play_services_error">Ce périphérique n\'est pas pris en charge. Services Google Play non installés!</string>
