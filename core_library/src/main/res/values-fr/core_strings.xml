@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="core_waiting">Attendre &#8230;</string>
     <string name="core_required_field">champ obligatoire</string>
     <string name="core_google_play_services_error">Ce périphérique n\'est pas pris en charge. Services Google Play non installés!</string>
@@ -8,5 +7,4 @@
     <string name="core_runtime_permissions_settings_txt">Pour utiliser cette application, vous devez autoriser tous les consentements dans la section \'Permissions\'</string>
     <string name="core_application_request">Activer</string>
     <string name="core_application_settings">Paramètres</string>
-
 </resources>
