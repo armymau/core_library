@@ -147,8 +147,21 @@ public class SharedPreferencesHelper {
         }
     }
 
+    public static void resetSinglePreference(Context context, String valueKey) {
+        Editor editor;
+        try {
+            editor = getPreferencesEditor(context, Context.MODE_PRIVATE);
+            if (editor != null) {
+                editor.remove(valueKey);
+                editor.apply();
+            }
+        } catch (Exception e) {
+            Log.e(CoreConstants.TAG, "error in clearPreference, " + e);
+        }
+    }
+
     /***/
-    public static void clearPreference(Context context) {
+    public static void clearAllPreference(Context context) {
         Editor editor;
         try {
             editor = getPreferencesEditor(context, Context.MODE_PRIVATE);
