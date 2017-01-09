@@ -77,6 +77,9 @@ public abstract class RuntimePermissionsActivity extends AppCompatActivity {
             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             intent.setData(Uri.parse("package:" + getPackageName()));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
             startActivityForResult(intent, CoreConstants.CHECK_PERMISSIONS_REQUEST_CODE);
         }
     };
