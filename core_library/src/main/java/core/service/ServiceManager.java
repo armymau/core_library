@@ -12,6 +12,7 @@ import com.squareup.okhttp.RequestBody;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,10 +32,10 @@ public class ServiceManager extends ProgressAsyncTask {
     private String endPointUrl = "";
     private int http_method;
     private String methodName;
-    private String authorization;
+    private HashMap<String, String> authorizations;
     private MultipartBuilder formEncodingBuilder;
 
-    public ServiceManager(String methodName, int http_method, Activity activity, String endPointUrl, Map<String, String> parameters, String authorization, MultipartBuilder formEncodingBuilder, boolean shouldLoadCache, boolean isVisibleProgress) {
+    public ServiceManager(String methodName, int http_method, Activity activity, String endPointUrl, Map<String, String> parameters, HashMap<String, String> authorizations, MultipartBuilder formEncodingBuilder, boolean shouldLoadCache, boolean isVisibleProgress) {
         super(activity, isVisibleProgress);
 
         this.methodName = methodName;
@@ -51,7 +52,10 @@ public class ServiceManager extends ProgressAsyncTask {
             this.formBody = prepareParametersForPostMethod(parameters);
         } else if(http_method == CoreConstants.HTTP_METHOD_GET_WITH_AUTHORIZATION) {
             this.endPointUrl = endPointUrl;
-            this.authorization = authorization;
+            this.authorizations = authorizations;
+        } else if(http_method == CoreConstants.HTTP_METHOD_GET_WITH_MULTI_AUTHORIZATION) {
+            this.endPointUrl = endPointUrl;
+            this.authorizations = authorizations;
         } else if (http_method == CoreConstants.HTTP_METHOD_POST_WITH_MULTIPART) {
             this.endPointUrl = endPointUrl;
             this.formBody = prepareParametersForPostMethodWithMultipart(parameters, formEncodingBuilder);
@@ -109,7 +113,10 @@ public class ServiceManager extends ProgressAsyncTask {
                     response = CustomOkHttpClient.doPostRequest(methodName, endPointUrl, formBody);
 
                 } else if (http_method == CoreConstants.HTTP_METHOD_GET_WITH_AUTHORIZATION) {
-                    response = CustomOkHttpClient.doGetRequestWithHeader(methodName, endPointUrl, authorization);
+                    response = CustomOkHttpClient.doGetRequestWithHeader(methodName, endPointUrl, authorizations.get("Authorization"));
+
+                } else if (http_method == CoreConstants.HTTP_METHOD_GET_WITH_MULTI_AUTHORIZATION) {
+                    response = CustomOkHttpClient.doGetRequestWithMultiHeader(methodName, endPointUrl, authorizations);
 
                 } else if (http_method == CoreConstants.HTTP_METHOD_POST_WITH_MULTIPART) {
                     response = CustomOkHttpClient.doPostRequestWithMultipart(methodName, endPointUrl, formBody);

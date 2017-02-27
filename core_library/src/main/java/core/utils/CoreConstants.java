@@ -27,6 +27,7 @@ public class CoreConstants {
     public static final int HTTP_METHOD_POST = 1;
     public static final int HTTP_METHOD_GET_WITH_AUTHORIZATION = 2;
     public static final int HTTP_METHOD_POST_WITH_MULTIPART = 3;
+    public static final int HTTP_METHOD_GET_WITH_MULTI_AUTHORIZATION = 4;
     public static final String HTTP_METHOD_CACHED = "CACHED RESPONSE";
 
 
