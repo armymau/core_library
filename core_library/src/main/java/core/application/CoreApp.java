@@ -60,12 +60,8 @@ public class CoreApp extends Application {
         ImageLoader.getInstance().init(config);
     }
 
-    public void setDiagonal(double diagonalScreenDevice) {
+    public void setDiagonalScreenDevice(double diagonalScreenDevice) {
         this.diagonalScreenDevice = diagonalScreenDevice;
-    }
-
-    public double getDiagonal() {
-        return diagonalScreenDevice;
     }
 
     public void setDimensions(int[] dimensions) {
@@ -84,7 +80,17 @@ public class CoreApp extends Application {
         return deviceTipology;
     }
 
+    public int[] getDimensions() {
+        return dimensions;
+    }
 
+    public String getDisplayDensity() {
+        return displayDensity;
+    }
+
+    public double getDiagonalScreenDevice() {
+        return diagonalScreenDevice;
+    }
 
     /** volley **/
     public RequestQueue getRequestQueue() {
