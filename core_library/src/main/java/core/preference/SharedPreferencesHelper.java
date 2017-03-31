@@ -153,7 +153,7 @@ public class SharedPreferencesHelper {
             editor = getPreferencesEditor(context, Context.MODE_PRIVATE);
             if (editor != null) {
                 editor.remove(valueKey);
-                editor.apply();
+                editor.commit();
             }
         } catch (Exception e) {
             Log.e(CoreConstants.TAG, "error in clearPreference, " + e);
