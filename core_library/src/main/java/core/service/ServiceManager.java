@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.RequestBody;
 
@@ -56,6 +57,10 @@ public class ServiceManager extends ProgressAsyncTask {
         } else if(http_method == CoreConstants.HTTP_METHOD_GET_WITH_MULTI_AUTHORIZATION) {
             this.endPointUrl = endPointUrl;
             this.authorizations = authorizations;
+        } else if(http_method == CoreConstants.HTTP_METHOD_POST_WITH_MULTI_AUTHORIZATION) {
+            this.endPointUrl = endPointUrl;
+            this.authorizations = authorizations;
+            this.formBody = prepareParametersForPostMethodWithJsonType(parameters);
         } else if (http_method == CoreConstants.HTTP_METHOD_POST_WITH_MULTIPART) {
             this.endPointUrl = endPointUrl;
             this.formBody = prepareParametersForPostMethodWithMultipart(parameters, formEncodingBuilder);
@@ -117,6 +122,9 @@ public class ServiceManager extends ProgressAsyncTask {
 
                 } else if (http_method == CoreConstants.HTTP_METHOD_GET_WITH_MULTI_AUTHORIZATION) {
                     response = CustomOkHttpClient.doGetRequestWithMultiHeader(methodName, endPointUrl, authorizations);
+
+                } else if (http_method == CoreConstants.HTTP_METHOD_POST_WITH_MULTI_AUTHORIZATION) {
+                    response = CustomOkHttpClient.doPostRequestWithMultiHeader(methodName, endPointUrl, authorizations, formBody);
 
                 } else if (http_method == CoreConstants.HTTP_METHOD_POST_WITH_MULTIPART) {
                     response = CustomOkHttpClient.doPostRequestWithMultipart(methodName, endPointUrl, formBody);
@@ -181,6 +189,30 @@ public class ServiceManager extends ProgressAsyncTask {
         RequestBody formBody = null;
         try {
             formBody = formEncodingBuilder.type(MultipartBuilder.FORM).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return formBody;
+    }
+
+    public static RequestBody prepareParametersForPostMethodWithJsonType(Map<String, String> parameters) {
+        RequestBody formBody = null;
+        try {
+            Gson gson = new Gson();
+
+            MediaType mediaType = MediaType.parse("application/json");
+
+            /*
+            Iterator it = parameters.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                request.addHeader((String) pair.getKey(), (String) pair.getValue());
+            }
+            */
+
+
+            formBody = RequestBody.create(mediaType, parameters.toString());
+
         } catch (Exception e) {
             e.printStackTrace();
         }

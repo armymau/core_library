@@ -56,7 +56,6 @@ public class CustomOkHttpClient {
         }
     }
 
-
     public static String doGetRequestWithMultiHeader(String methodName, String url, HashMap<String, String> authorizations) {
         Response response;
         try {
@@ -87,7 +86,6 @@ public class CustomOkHttpClient {
             return null;
         }
     }
-
 
     public static String doGetRequestWithHeader(String methodName, String url, String authorization) {
         Response response;
@@ -133,6 +131,37 @@ public class CustomOkHttpClient {
                 Log.e(CoreConstants.TAG, methodName);
                 Log.d(CoreConstants.TAG, url);
                 Log.d(CoreConstants.TAG, "PARAMETERS   : \n" + formBody);
+                Log.d(CoreConstants.TAG, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+                Log.d(CoreConstants.TAG, "CODE         : \n" + response.code());
+                Log.d(CoreConstants.TAG, "RESPONSE     : \n" + response.toString());
+            }
+            return response.body().string();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String doPostRequestWithMultiHeader(String methodName, String url, HashMap<String, String> authorizations, RequestBody formBody) {
+        Response response;
+        try {
+            Request.Builder request = new Request.Builder().url(url).post(formBody);
+
+            Iterator it = authorizations.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                request.addHeader((String) pair.getKey(), (String) pair.getValue());
+            }
+            request.build();
+
+            response = getOkHttpClient().newCall(request.build()).execute();
+
+            if (!CoreConstants.isDebug && !CoreConstants.isSigned) {
+                Log.d(CoreConstants.TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                Log.d(CoreConstants.TAG, "POST MULTI HEADER");
+                Log.e(CoreConstants.TAG, methodName);
+                Log.d(CoreConstants.TAG, url);
                 Log.d(CoreConstants.TAG, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
                 Log.d(CoreConstants.TAG, "CODE         : \n" + response.code());
                 Log.d(CoreConstants.TAG, "RESPONSE     : \n" + response.toString());
