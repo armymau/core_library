@@ -36,7 +36,7 @@ public class ServiceManager extends ProgressAsyncTask {
     private HashMap<String, String> authorizations;
     private MultipartBuilder formEncodingBuilder;
 
-    public ServiceManager(String methodName, int http_method, Activity activity, String endPointUrl, Map<String, String> parameters, HashMap<String, String> authorizations, MultipartBuilder formEncodingBuilder, boolean shouldLoadCache, boolean isVisibleProgress) {
+    public ServiceManager(String methodName, int http_method, Activity activity, String endPointUrl, Map<String, Object> parameters, HashMap<String, String> authorizations, MultipartBuilder formEncodingBuilder, boolean shouldLoadCache, boolean isVisibleProgress) {
         super(activity, isVisibleProgress);
 
         this.methodName = methodName;
@@ -158,23 +158,23 @@ public class ServiceManager extends ProgressAsyncTask {
         return response;
     }
 
-    public static String prepareParametersForGetMethod(Map<String, String> parameters) {
+    public static String prepareParametersForGetMethod(Map<String, Object> parameters) {
         String param = "";
         List<String> keys = new ArrayList<>(parameters.keySet());
-        List<String> values = new ArrayList<>(parameters.values());
+        List<Object> values = new ArrayList<>(parameters.values());
         for (int i = 0; i < keys.size(); i++) {
             param += "&" + keys.get(i) + "=" + values.get(i);
         }
         return param;
     }
 
-    public static RequestBody prepareParametersForPostMethod(Map<String, String> parameters) {
+    public static RequestBody prepareParametersForPostMethod(Map<String, Object> parameters) {
         FormEncodingBuilder formEncodingBuilder = new FormEncodingBuilder();
         List<String> keys = new ArrayList<>(parameters.keySet());
-        List<String> values = new ArrayList<>(parameters.values());
+        List<Object> values = new ArrayList<>(parameters.values());
 
         for (int i = 0; i < keys.size(); i++) {
-            formEncodingBuilder.add(keys.get(i), values.get(i));
+            formEncodingBuilder.add(keys.get(i), (String) values.get(i));
         }
         RequestBody formBody = null;
         try {
@@ -185,7 +185,7 @@ public class ServiceManager extends ProgressAsyncTask {
         return formBody;
     }
 
-    public static RequestBody prepareParametersForPostMethodWithMultipart(Map<String, String> parameters, MultipartBuilder formEncodingBuilder) {
+    public static RequestBody prepareParametersForPostMethodWithMultipart(Map<String, Object> parameters, MultipartBuilder formEncodingBuilder) {
         RequestBody formBody = null;
         try {
             formBody = formEncodingBuilder.type(MultipartBuilder.FORM).build();
@@ -195,7 +195,7 @@ public class ServiceManager extends ProgressAsyncTask {
         return formBody;
     }
 
-    public static RequestBody prepareParametersForPostMethodWithJsonType(Map<String, String> parameters) {
+    public static RequestBody prepareParametersForPostMethodWithJsonType(Map<String, Object> parameters) {
         RequestBody formBody = null;
         try {
             Gson gson = new Gson();
