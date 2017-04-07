@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +55,9 @@ public class ServiceManager extends ProgressAsyncTask {
         } else if(http_method == CoreConstants.HTTP_METHOD_GET_WITH_AUTHORIZATION) {
             this.endPointUrl = endPointUrl;
             this.authorizations = authorizations;
+        } else if (http_method == CoreConstants.HTTP_METHOD_POST_WITH_MULTIPART) {
+            this.endPointUrl = endPointUrl;
+            this.formBody = prepareParametersForPostMethodWithMultipart(parameters, formEncodingBuilder);
         } else if(http_method == CoreConstants.HTTP_METHOD_GET_WITH_MULTI_AUTHORIZATION) {
             this.endPointUrl = endPointUrl;
             this.authorizations = authorizations;
@@ -61,9 +65,6 @@ public class ServiceManager extends ProgressAsyncTask {
             this.endPointUrl = endPointUrl;
             this.authorizations = authorizations;
             this.formBody = prepareParametersForPostMethodWithJsonType(parameters);
-        } else if (http_method == CoreConstants.HTTP_METHOD_POST_WITH_MULTIPART) {
-            this.endPointUrl = endPointUrl;
-            this.formBody = prepareParametersForPostMethodWithMultipart(parameters, formEncodingBuilder);
         }
     }
 
@@ -120,14 +121,14 @@ public class ServiceManager extends ProgressAsyncTask {
                 } else if (http_method == CoreConstants.HTTP_METHOD_GET_WITH_AUTHORIZATION) {
                     response = CustomOkHttpClient.doGetRequestWithHeader(methodName, endPointUrl, authorizations.get("Authorization"));
 
+                } else if (http_method == CoreConstants.HTTP_METHOD_POST_WITH_MULTIPART) {
+                    response = CustomOkHttpClient.doPostRequestWithMultipart(methodName, endPointUrl, formBody);
+
                 } else if (http_method == CoreConstants.HTTP_METHOD_GET_WITH_MULTI_AUTHORIZATION) {
                     response = CustomOkHttpClient.doGetRequestWithMultiHeader(methodName, endPointUrl, authorizations);
 
                 } else if (http_method == CoreConstants.HTTP_METHOD_POST_WITH_MULTI_AUTHORIZATION) {
                     response = CustomOkHttpClient.doPostRequestWithMultiHeader(methodName, endPointUrl, authorizations, formBody);
-
-                } else if (http_method == CoreConstants.HTTP_METHOD_POST_WITH_MULTIPART) {
-                    response = CustomOkHttpClient.doPostRequestWithMultipart(methodName, endPointUrl, formBody);
 
                 }
                 if (response != null) {
@@ -208,7 +209,14 @@ public class ServiceManager extends ProgressAsyncTask {
                 request.addHeader((String) pair.getKey(), (String) pair.getValue());
             }
             */
-            formBody = RequestBody.create(mediaType, parameters.toString());
+
+            Iterator it = parameters.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                formBody = RequestBody.create(mediaType, (String) pair.getValue());
+            }
+
+            //formBody = RequestBody.create(mediaType, (String) parameters.get("key"));
 
         } catch (Exception e) {
             e.printStackTrace();

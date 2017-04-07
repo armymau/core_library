@@ -56,25 +56,22 @@ public class CustomOkHttpClient {
         }
     }
 
-    public static String doGetRequestWithMultiHeader(String methodName, String url, HashMap<String, String> authorizations) {
+    public static String doPostRequest(String methodName, String url, RequestBody formBody) {
         Response response;
         try {
-            Request.Builder request = new Request.Builder().url(url).get();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(formBody)
+                    .build();
 
-            Iterator it = authorizations.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry)it.next();
-                request.addHeader((String) pair.getKey(), (String) pair.getValue());
-            }
-            request.build();
-
-            response = getOkHttpClient().newCall(request.build()).execute();
+            response = getOkHttpClient().newCall(request).execute();
 
             if (!CoreConstants.isDebug && !CoreConstants.isSigned) {
                 Log.d(CoreConstants.TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                Log.d(CoreConstants.TAG, "GET MULTI HEADER");
+                Log.d(CoreConstants.TAG, "POST");
                 Log.e(CoreConstants.TAG, methodName);
                 Log.d(CoreConstants.TAG, url);
+                Log.d(CoreConstants.TAG, "PARAMETERS   : \n" + formBody);
                 Log.d(CoreConstants.TAG, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
                 Log.d(CoreConstants.TAG, "CODE         : \n" + response.code());
                 Log.d(CoreConstants.TAG, "RESPONSE     : \n" + response.toString());
@@ -115,22 +112,25 @@ public class CustomOkHttpClient {
         }
     }
 
-    public static String doPostRequest(String methodName, String url, RequestBody formBody) {
+    public static String doGetRequestWithMultiHeader(String methodName, String url, HashMap<String, String> authorizations) {
         Response response;
         try {
-            Request request = new Request.Builder()
-                    .url(url)
-                    .post(formBody)
-                    .build();
+            Request.Builder request = new Request.Builder().url(url).get();
 
-            response = getOkHttpClient().newCall(request).execute();
+            Iterator it = authorizations.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                request.addHeader((String) pair.getKey(), (String) pair.getValue());
+            }
+            request.build();
+
+            response = getOkHttpClient().newCall(request.build()).execute();
 
             if (!CoreConstants.isDebug && !CoreConstants.isSigned) {
                 Log.d(CoreConstants.TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                Log.d(CoreConstants.TAG, "POST");
+                Log.d(CoreConstants.TAG, "GET MULTI HEADER");
                 Log.e(CoreConstants.TAG, methodName);
                 Log.d(CoreConstants.TAG, url);
-                Log.d(CoreConstants.TAG, "PARAMETERS   : \n" + formBody);
                 Log.d(CoreConstants.TAG, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
                 Log.d(CoreConstants.TAG, "CODE         : \n" + response.code());
                 Log.d(CoreConstants.TAG, "RESPONSE     : \n" + response.toString());
