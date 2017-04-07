@@ -201,7 +201,6 @@ public class ServiceManager extends ProgressAsyncTask {
             Gson gson = new Gson();
 
             MediaType mediaType = MediaType.parse("application/json");
-
             /*
             Iterator it = parameters.entrySet().iterator();
             while (it.hasNext()) {
@@ -209,8 +208,6 @@ public class ServiceManager extends ProgressAsyncTask {
                 request.addHeader((String) pair.getKey(), (String) pair.getValue());
             }
             */
-
-
             formBody = RequestBody.create(mediaType, parameters.toString());
 
         } catch (Exception e) {
