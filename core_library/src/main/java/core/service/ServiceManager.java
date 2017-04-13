@@ -28,7 +28,7 @@ import core.utils.CoreConstants;
 public class ServiceManager <T> extends ProgressAsyncTask {
 
     private String response;
-    private Object clazz;
+    private T clazz;
     private RequestBody formBody;
     private boolean shouldLoadCache;
     private Activity activity;
@@ -115,7 +115,7 @@ public class ServiceManager <T> extends ProgressAsyncTask {
         Gson gson = new Gson();
         T objectResponse;
         try {
-            objectResponse = (T) gson.fromJson(result, clazz.getClass());
+            objectResponse = (T) gson.fromJson(result, (Class<Object>) clazz);
         } catch (Exception e) {
             return null;
         }
