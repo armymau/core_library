@@ -115,7 +115,7 @@ public class ServiceManager <T> extends ProgressAsyncTask {
         Gson gson = new Gson();
         T objectResponse;
         try {
-            objectResponse = (T) gson.fromJson(response, clazz.getClass());
+            objectResponse = (T) gson.fromJson(result, clazz.getClass());
         } catch (Exception e) {
             return null;
         }
