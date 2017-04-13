@@ -9,7 +9,7 @@ import android.view.inputmethod.InputMethodManager;
 import core.fragment.ProgressDialogFragment;
 
 
-public abstract class ProgressAsyncTask extends AsyncTask<String, String, String> {
+public abstract class ProgressAsyncTask <T> extends AsyncTask<String, String, T> {
     private final Activity activity;
     private boolean isVisibleProgress = true;
 
@@ -28,12 +28,12 @@ public abstract class ProgressAsyncTask extends AsyncTask<String, String, String
         }
     }
 
-    @Override
-    protected void onPostExecute(String result) {
-        super.onPostExecute(result);
-    }
-
     protected void onProgressUpdate(String values) {
         super.onProgressUpdate(values);
+    }
+
+    @Override
+    protected void onPostExecute(T result) {
+        super.onPostExecute(result);
     }
 }

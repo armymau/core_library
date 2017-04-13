@@ -25,9 +25,10 @@ import core.utils.ConnectionUtils;
 import core.utils.CoreConstants;
 
 @SuppressWarnings("ALL")
-public class ServiceManager extends ProgressAsyncTask {
+public class ServiceManager <T> extends ProgressAsyncTask {
 
     private String response;
+    private Object clazz;
     private RequestBody formBody;
     private boolean shouldLoadCache;
     private Activity activity;
@@ -37,7 +38,7 @@ public class ServiceManager extends ProgressAsyncTask {
     private HashMap<String, String> authorizations;
     private MultipartBuilder formEncodingBuilder;
 
-    public ServiceManager(String methodName, int http_method, Activity activity, String endPointUrl, Map<String, Object> parameters, HashMap<String, String> authorizations, MultipartBuilder formEncodingBuilder, boolean shouldLoadCache, boolean isVisibleProgress) {
+    public ServiceManager(String methodName, int http_method, Activity activity, String endPointUrl, Map<String, Object> parameters, HashMap<String, String> authorizations, MultipartBuilder formEncodingBuilder, boolean shouldLoadCache, boolean isVisibleProgress, T clazz) {
         super(activity, isVisibleProgress);
 
         this.methodName = methodName;
@@ -45,6 +46,7 @@ public class ServiceManager extends ProgressAsyncTask {
         this.activity = activity;
         this.shouldLoadCache = shouldLoadCache;
         this.formEncodingBuilder = formEncodingBuilder;
+        this.clazz = clazz;
         response = null;
 
         if (http_method == CoreConstants.HTTP_METHOD_GET) {
@@ -82,7 +84,11 @@ public class ServiceManager extends ProgressAsyncTask {
     }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected Object doInBackground(Object[] objects) {
+        return doInBackground();
+    }
+
+    protected T doInBackground(Void... objects) {
         String result = null;
         if (shouldLoadCache) {
             if (response != null) {
@@ -105,7 +111,17 @@ public class ServiceManager extends ProgressAsyncTask {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result;
+
+        Gson gson = new Gson();
+        T objectResponse;
+        try {
+            objectResponse = (T) gson.fromJson(response, clazz.getClass());
+        } catch (Exception e) {
+            return null;
+        }
+        return objectResponse;
+
+        //return result;
     }
 
     private String callEndPoint(boolean shouldLoadCache) throws MalformedURLException {
@@ -155,7 +171,6 @@ public class ServiceManager extends ProgressAsyncTask {
         intent.setAction("core.library.NO_CONNECTION_ACTION");
         intent.putExtra("isNetworkAvailable", ConnectionUtils.isNetworkAvailable(activity));
         activity.sendBroadcast(intent);
-
         return response;
     }
 
