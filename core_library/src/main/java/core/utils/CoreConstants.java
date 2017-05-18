@@ -9,7 +9,7 @@ public class CoreConstants {
     public static final boolean isDebug = true;
     public static final boolean isSigned = false;
 
-    public static final int HTTP_TIMEOUT = 7 * 1000;    // milliseconds
+    public static final int HTTP_TIMEOUT = 15 * 1000;    // milliseconds
     public static final int LONG_DELAY = 5000;          // 3.5 seconds
     public static final int SHORT_DELAY = 2000;         // 2 seconds
 

@@ -18,7 +18,7 @@ import core.utils.CoreConstants;
 public class CustomOkHttpClient {
 
     private static OkHttpClient okHttpClient;
-    private static final int HTTP_TIMEOUT = 7 * 1000; // milliseconds
+    private static final int HTTP_TIMEOUT = 15 * 1000; // milliseconds
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
 
     private static OkHttpClient getOkHttpClient() {
