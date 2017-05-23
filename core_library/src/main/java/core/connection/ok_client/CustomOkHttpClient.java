@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
@@ -48,8 +49,18 @@ public class CustomOkHttpClient {
 
     private static OkHttpClient getOkHttpsClient() throws GeneralSecurityException {
         if (okHttpClient == null) {
-            SSLContext sslContext = sslContextForTrustedCertificates(trustedCertificatesInputStream());
-            okHttpClient = new OkHttpClient().setSocketFactory(sslContext.getSocketFactory());
+            X509TrustManager trustManager;
+            SSLSocketFactory sslSocketFactory;
+            try {
+                trustManager = trustManagerForCertificates(trustedCertificatesInputStream());
+                SSLContext sslContext = SSLContext.getInstance("TLS");
+                sslContext.init(null, new TrustManager[] { trustManager }, null);
+                sslSocketFactory = sslContext.getSocketFactory();
+            } catch (GeneralSecurityException e) {
+                throw new RuntimeException(e);
+            }
+            
+            okHttpClient = new OkHttpClient().setSslSocketFactory(sslSocketFactory);
             okHttpClient.setConnectTimeout(HTTP_TIMEOUT, TimeUnit.MILLISECONDS);
             okHttpClient.setReadTimeout(HTTP_TIMEOUT, TimeUnit.MILLISECONDS);
         }
@@ -126,7 +137,7 @@ public class CustomOkHttpClient {
                 .inputStream();
     }
 
-    private static SSLContext sslContextForTrustedCertificates(InputStream in) throws GeneralSecurityException {
+    private static X509TrustManager trustManagerForCertificates(InputStream in) throws GeneralSecurityException {
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
             Collection<? extends Certificate> certificates = certificateFactory.generateCertificates(in);
             if (certificates.isEmpty()) {
@@ -152,7 +163,7 @@ public class CustomOkHttpClient {
                 throw new IllegalStateException("Unexpected default trust managers:"
                         + Arrays.toString(trustManagers));
             }
-            return (SSLContext) trustManagers[0];
+            return (X509TrustManager) trustManagers[0];
     }
 
     private static KeyStore newEmptyKeyStore(char[] password) throws GeneralSecurityException {
