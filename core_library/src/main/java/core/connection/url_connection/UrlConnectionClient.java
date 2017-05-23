@@ -29,7 +29,6 @@ public class UrlConnectionClient {
         HttpURLConnection conn;
         InputStream is = null;
 
-        // HTTP connection reuse which was buggy pre-froyo
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
             System.setProperty("http.keepAlive", "false");
         }
@@ -92,10 +91,42 @@ public class UrlConnectionClient {
         }
     }
 
-    public static String doPOST(String endPointUrl) throws IOException {
+    public static String doPOST(String endPointUrl) throws Exception {
         HttpURLConnection conn;
         InputStream is = null;
         DataOutputStream dataout;
+
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
+            System.setProperty("http.keepAlive", "false");
+        }
+
+        if (endPointUrl.startsWith("file://")) {
+            return readIt(new FileInputStream(endPointUrl.replace("file://", "")));
+        }
+
+        if (endPointUrl.startsWith("https://")) {
+            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+            SSLContext context = SSLContext.getInstance("TLS");
+            context.init(null, new X509TrustManager[]{
+                    new X509TrustManager() {
+                        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        public X509Certificate[] getAcceptedIssuers() {
+                            return new X509Certificate[0];
+                        }
+                    }
+            }, new SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
+        }
 
         try {
             URL url = new URL(endPointUrl);
