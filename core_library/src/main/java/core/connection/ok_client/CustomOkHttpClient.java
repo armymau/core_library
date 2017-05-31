@@ -21,8 +21,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -46,7 +48,48 @@ public class CustomOkHttpClient {
         return okHttpClient;
     }
 
+    private static OkHttpClient getOkHttpsClient() throws GeneralSecurityException {
+        if (okHttpClient == null) {
+            okHttpClient = new OkHttpClient();
+            okHttpClient.setHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String s, SSLSession sslSession) {
+                    return true;
+                }
+            });
+            TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(
+                        java.security.cert.X509Certificate[] x509Certificates,
+                        String s) throws java.security.cert.CertificateException {
+                }
 
+                @Override
+                public void checkServerTrusted(
+                        java.security.cert.X509Certificate[] x509Certificates,
+                        String s) throws java.security.cert.CertificateException {
+                }
+
+                @Override
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return new java.security.cert.X509Certificate[] {};
+                }
+            } };
+
+            try {
+                SSLContext sc = SSLContext.getInstance("TLS");
+                sc.init(null, trustAllCerts, new java.security.SecureRandom());
+                okHttpClient.setSslSocketFactory(sc.getSocketFactory());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            okHttpClient.setConnectTimeout(HTTP_TIMEOUT, TimeUnit.MILLISECONDS);
+            okHttpClient.setReadTimeout(HTTP_TIMEOUT, TimeUnit.MILLISECONDS);
+        }
+        return okHttpClient;
+    }
+
+    /*
     private static OkHttpClient getOkHttpsClient() throws GeneralSecurityException {
         if (okHttpClient == null) {
             X509TrustManager trustManager;
@@ -161,6 +204,11 @@ public class CustomOkHttpClient {
             throw new AssertionError(e);
         }
     }
+    */
+
+
+
+
 
     public static String doGetRequest(String methodName, String url) {
         Response response;
