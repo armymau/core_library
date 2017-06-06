@@ -3,9 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CoreLibrary.iml" filepath="$PROJECT_DIR$/CoreLibrary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/core_library.iml" filepath="$PROJECT_DIR$/core_library.iml" />
-      <module fileurl="file://$PROJECT_DIR$/core_library.iml" filepath="$PROJECT_DIR$/core_library.iml" />
       <module fileurl="file://$PROJECT_DIR$/core_library/core_library.iml" filepath="$PROJECT_DIR$/core_library/core_library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core_library.iml" filepath="$PROJECT_DIR$/core_library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core_library.iml" filepath="$PROJECT_DIR$/core_library.iml" />
       <module fileurl="file://$PROJECT_DIR$/core_library/core_library-core_library.iml" filepath="$PROJECT_DIR$/core_library/core_library-core_library.iml" />
       <module fileurl="file://$PROJECT_DIR$/core_library/core_library-core_library.iml" filepath="$PROJECT_DIR$/core_library/core_library-core_library.iml" />
     </modules>
