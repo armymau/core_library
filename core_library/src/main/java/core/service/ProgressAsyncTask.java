@@ -39,7 +39,7 @@ public abstract class ProgressAsyncTask <T> extends AsyncTask<String, String, T>
     @Override
     protected void onPostExecute(T result) {
         super.onPostExecute(result);
-        if (progressFragment != null && progressFragment.isVisible() && progressFragment.isAdded()) {
+        if (progressFragment != null && progressFragment.isAdded()) {
             progressFragment.dismiss();
         }
     }
