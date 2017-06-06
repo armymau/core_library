@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 
 public class ProgressDialogFragment extends DialogFragment {
     private static final String KEY_MSG = "KEY_MSG";
@@ -38,6 +39,19 @@ public class ProgressDialogFragment extends DialogFragment {
             setArguments(arguments);
             if (!ProgressDialogFragment.wantToCloseDialog) {
                 show(context.getSupportFragmentManager(), ProgressDialogFragment.class.getSimpleName());
+            }
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void show(FragmentManager fragmentManager, int resId) {
+        try {
+            Bundle arguments = new Bundle(1);
+            arguments.putInt(KEY_MSG, resId);
+            setArguments(arguments);
+            if (!ProgressDialogFragment.wantToCloseDialog) {
+                show(fragmentManager, ProgressDialogFragment.class.getSimpleName());
             }
         } catch (IllegalStateException e) {
             e.printStackTrace();
