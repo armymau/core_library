@@ -44,8 +44,8 @@ public class DeviceUtils {
             float screenHeight = dm.heightPixels / dm.ydpi;
             double size = Math.sqrt(Math.pow(screenWidth, 2) + Math.pow(screenHeight, 2));
 
-            Log.e(CoreConstants.TAG, "Is tablet device : " + (size >= 6));
-            return size >= 6;
+            Log.e(CoreConstants.TAG, "Is tablet device : " + (size >= 6.9));
+            return size >= 6.9;
         } catch (Exception t) {
             Log.e(CoreConstants.TAG, "Failed to compute screen size", t);
             return false;
