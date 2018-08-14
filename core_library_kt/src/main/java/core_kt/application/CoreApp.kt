@@ -14,7 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType
 import core_kt.utils.TAG
 
-open class CoreApp(private var instance: CoreApp) : Application() {
+open class CoreApp : Application() {
 
     var dimensions = IntArray(2)
     lateinit var displayDensity: String
@@ -22,9 +22,11 @@ open class CoreApp(private var instance: CoreApp) : Application() {
     var isTabletTipology: Boolean = false
 
     lateinit var mRequestQueue: RequestQueue
+    private lateinit var instance: CoreApp
 
     @Synchronized
     fun getInstance(): CoreApp {
+        instance = CoreApp()
         return instance
     }
 
