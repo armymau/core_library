@@ -14,7 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType
 import core_kt.utils.TAG
 
-class CoreApp(private var instance: CoreApp) : Application() {
+open class CoreApp(private var instance: CoreApp) : Application() {
 
     var dimensions = IntArray(2)
     lateinit var displayDensity: String
