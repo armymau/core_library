@@ -23,7 +23,7 @@ open abstract class RuntimePermissionsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
     }
 
-    private fun onRequestAppPermissions(requestedPermissions: Array<String>, stringId: Int, requestCode: Int) {
+    fun onRequestAppPermissions(requestedPermissions: Array<String>, stringId: Int, requestCode: Int) {
         this.requestedPermissions = requestedPermissions
 
         var permissionCheck = PackageManager.PERMISSION_GRANTED
