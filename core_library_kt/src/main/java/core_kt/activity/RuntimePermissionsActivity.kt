@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Bundle
 import android.provider.Settings
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
@@ -13,11 +14,14 @@ import android.view.View
 import armymau.it.core_library.R
 import core_kt.utils.CHECK_PERMISSIONS_REQUEST_CODE
 
-
-abstract class RuntimePermissionsActivity : AppCompatActivity() {
+open abstract class RuntimePermissionsActivity : AppCompatActivity() {
 
     lateinit var requestedPermissions: Array<String>
     private var shouldShowRequestPermissionRationale: Boolean = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     private fun onRequestAppPermissions(requestedPermissions: Array<String>, stringId: Int, requestCode: Int) {
         this.requestedPermissions = requestedPermissions
