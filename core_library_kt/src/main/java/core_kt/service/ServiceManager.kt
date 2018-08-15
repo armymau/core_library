@@ -22,7 +22,7 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
 
-open class ServiceManager<T>(private val methodName: String, private val http_method: Int, private val activity: Activity, endPointUrl: String, parameters: Map<String, Any>, authorizations: HashMap<String, String>, private val formEncodingBuilder: MultipartBuilder, private val shouldLoadCache: Boolean, isVisibleProgress: Boolean, private val clazz: T) : ProgressAsyncTask<T>(activity, isVisibleProgress) {
+open class ServiceManager<T>(private val methodName: String, private val http_method: Int, private val activity: Activity, endPointUrl: String, parameters: Map<String, Any>, authorizations: HashMap<String, String>, private val formEncodingBuilder: MultipartBuilder?, private val shouldLoadCache: Boolean, isVisibleProgress: Boolean, private val clazz: T) : ProgressAsyncTask<T>(activity, isVisibleProgress) {
 
     private var response: String? = null
     private var formBody: RequestBody? = null
@@ -45,7 +45,7 @@ open class ServiceManager<T>(private val methodName: String, private val http_me
             }
             HTTP_METHOD_POST_WITH_MULTIPART -> {
                 this.endPointUrl = endPointUrl
-                this.formBody = prepareParametersForPostMethodWithMultipart(formEncodingBuilder)
+                this.formBody = formEncodingBuilder?.let { prepareParametersForPostMethodWithMultipart(it) }
             }
             HTTP_METHOD_GET_WITH_MULTI_AUTHORIZATION -> {
                 this.endPointUrl = endPointUrl
