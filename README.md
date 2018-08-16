@@ -17,7 +17,7 @@ Add it in your root build.gradle at the end of repositories:
 
 ```	
   dependencies {
-	      compile 'com.github.armymau:core_library:v1.21'
+	      compile 'com.github.armymau:core_library:v1.22'
 	}
 ```
 
