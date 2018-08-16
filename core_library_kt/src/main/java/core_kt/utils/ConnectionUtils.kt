@@ -1,12 +1,11 @@
 package core_kt.utils
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Build
 
-@SuppressLint("MissingPermission")
+@SuppressWarnings("deprecation")
 fun isNetworkAvailable(context: Context): Boolean {
     try {
         val connectivity = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -17,9 +16,9 @@ fun isNetworkAvailable(context: Context): Boolean {
             var networkInfo: NetworkInfo
             for (mNetwork in networks) {
                 networkInfo = connectivity.getNetworkInfo(mNetwork)
-                if (!(networkInfo.state == NetworkInfo.State.CONNECTED &&
+                if (networkInfo.state == NetworkInfo.State.CONNECTED &&
                                 connectivity.activeNetworkInfo.isAvailable &&
-                                connectivity.activeNetworkInfo.isConnected)) {
+                                connectivity.activeNetworkInfo.isConnected) {
                     return true
                 }
             }
@@ -35,7 +34,7 @@ fun isNetworkAvailable(context: Context): Boolean {
                 }
             }
         }
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
         return false
     }
     return false
