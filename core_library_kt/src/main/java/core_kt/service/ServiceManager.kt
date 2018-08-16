@@ -71,17 +71,16 @@ open class ServiceManager<T>(private val methodName: String, private val http_me
         }
     }
 
-    override fun doInBackground(vararg p0: String?): T? {
+    @Override
+    override fun doInBackground(vararg p0: String) : T? {
         return doInBackground()
     }
-
-    private fun doInBackground(): T? {
+    
+    fun doInBackground(): T? {
         var result: String? = null
 
         if (shouldLoadCache) {
-            if (response != null) {
-                publishProgress(response)
-            }
+            if (response != null) publishProgress(response as String)
         }
         try {
             val responseNow = callEndPoint(shouldLoadCache)

@@ -14,7 +14,7 @@ import android.view.View
 import armymau.it.core_library.R
 import core_kt.utils.CHECK_PERMISSIONS_REQUEST_CODE
 
-open abstract class RuntimePermissionsActivity : AppCompatActivity() {
+abstract class RuntimePermissionsActivity : AppCompatActivity() {
 
     lateinit var requestedPermissions: Array<String>
     private var shouldShowRequestPermissionRationale: Boolean = false
