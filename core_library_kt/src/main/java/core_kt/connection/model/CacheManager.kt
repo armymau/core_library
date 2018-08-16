@@ -5,7 +5,6 @@ import core_kt.preference.getStringPreference
 import core_kt.utils.TAG
 import java.net.URL
 
-
 /* 	il metodo recupererà un oggetto precedentemente salvato in cache, il nome del file da cui recuperare l’oggetto sarà dato da “getIdentifierForRequest” */
 fun getCachedObjectForRequest(context: Context, request: URL): Any? {
     try {
