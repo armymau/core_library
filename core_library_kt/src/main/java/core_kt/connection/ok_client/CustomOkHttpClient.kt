@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 import javax.net.ssl.*
 
 private var okHttpClient: OkHttpClient = OkHttpClient()
-private val HTTP_TIMEOUT = 15 * 1000 // milliseconds
+private val HTTP_TIMEOUT = 60 * 1000 // milliseconds
 private val MEDIA_TYPE_PNG = MediaType.parse("image/png")
 
 fun getOkHttpClient(): OkHttpClient {
