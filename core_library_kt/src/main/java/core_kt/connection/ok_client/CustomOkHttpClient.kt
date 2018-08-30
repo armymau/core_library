@@ -19,6 +19,8 @@ private val MEDIA_TYPE_PNG = MediaType.parse("image/png")
 fun getOkHttpClient(): OkHttpClient {
     okHttpClient.setConnectTimeout(HTTP_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
     okHttpClient.setReadTimeout(HTTP_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
+    okHttpClient.setWriteTimeout(HTTP_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
+
     return okHttpClient
 }
 
