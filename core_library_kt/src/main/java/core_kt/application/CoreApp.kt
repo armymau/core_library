@@ -17,12 +17,10 @@ import core_kt.utils.TAG
 
 class CoreApp private constructor(var context: Context) : Application() {
 
-    init {
-        var dimensions = IntArray(2)
-        lateinit var displayDensity: String
-        var diagonalScreenDevice: Double = 0.toDouble()
-        var isTabletTipology: Boolean = false
-    }
+    var dimensions = IntArray(2)
+    lateinit var displayDensity: String
+    var diagonalScreenDevice: Double = 0.toDouble()
+    var isTabletTipology: Boolean = false
 
     lateinit var mRequestQueue: RequestQueue
 
