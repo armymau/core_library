@@ -12,24 +12,21 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType
+import core_kt.singleton.SingletonHolder
 import core_kt.utils.TAG
 
-open class CoreApp : Application() {
+class CoreApp private constructor(var context: Context) : Application() {
 
-    var dimensions = IntArray(2)
-    lateinit var displayDensity: String
-    var diagonalScreenDevice: Double = 0.toDouble()
-    var isTabletTipology: Boolean = false
+    init {
+        var dimensions = IntArray(2)
+        lateinit var displayDensity: String
+        var diagonalScreenDevice: Double = 0.toDouble()
+        var isTabletTipology: Boolean = false
+    }
 
     lateinit var mRequestQueue: RequestQueue
 
-
-    class CoreApp private constructor(context: Context) {
-        init {
-            println("init complete")
-        }
-        companion object : SingletonHolder<CoreApp, Context>(::CoreApp)
-    }
+    companion object : SingletonHolder<CoreApp, Context>(::CoreApp)
 
     /*
     companion object CoreAppSingleton {
@@ -87,29 +84,5 @@ open class CoreApp : Application() {
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
                 .build()
         ImageLoader.getInstance().init(config)
-    }
-
-    open class SingletonHolder<out T, in A>(creator: (A) -> T) {
-        private var creator: ((A) -> T)? = creator
-        @Volatile private var instance: T? = null
-
-        fun getInstance(arg: A): T {
-            val i = instance
-            if (i != null) {
-                return i
-            }
-
-            return synchronized(this) {
-                val i2 = instance
-                if (i2 != null) {
-                    i2
-                } else {
-                    val created = creator!!(arg)
-                    instance = created
-                    creator = null
-                    created
-                }
-            }
-        }
     }
 }
