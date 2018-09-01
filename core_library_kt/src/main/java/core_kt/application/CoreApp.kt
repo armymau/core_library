@@ -15,7 +15,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType
 import core_kt.singleton.SingletonHolder
 import core_kt.utils.TAG
 
-class CoreApp private constructor(var context: Context) : Application() {
+class CoreApp private constructor(context: Context) : Application() {
 
     var dimensions = IntArray(2)
     lateinit var displayDensity: String
