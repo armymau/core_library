@@ -22,13 +22,21 @@ open class CoreApp : Application() {
     var isTabletTipology: Boolean = false
 
     lateinit var mRequestQueue: RequestQueue
-    private lateinit var instance: CoreApp
+    private lateinit var instance: CoreAppSingleton
 
+    companion object CoreAppSingleton {
+        init {
+            println("init complete")
+        }
+    }
+
+    /*
     @Synchronized
-    fun getInstance(): CoreApp {
-        instance = CoreApp()
+    fun getInstance(): CoreAppSingleton {
+        //instance = CoreAppSingleton
         return instance
     }
+    */
 
     fun getRequestQueue(): RequestQueue {
         mRequestQueue = Volley.newRequestQueue(applicationContext)
@@ -42,7 +50,7 @@ open class CoreApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
+        instance = CoreAppSingleton
 
         initImageLoader(applicationContext)
     }
