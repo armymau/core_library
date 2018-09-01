@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.support.multidex.MultiDex
 import android.text.TextUtils
-
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
@@ -27,24 +26,6 @@ class CoreApp : Application {
     constructor()
 
     private constructor(context: Context) : this()
-
-    companion object : SingletonHolder<CoreApp, Context>(::CoreApp)
-
-    /*
-    companion object CoreAppSingleton {
-        init {
-            println("init complete")
-        }
-    }
-    */
-
-    /*
-    @Synchronized
-    fun getInstance(): CoreAppSingleton {
-        //instance = CoreAppSingleton
-        return instance
-    }
-    */
 
     fun getRequestQueue(): RequestQueue {
         mRequestQueue = Volley.newRequestQueue(applicationContext)
@@ -89,4 +70,6 @@ class CoreApp : Application {
                 .build()
         ImageLoader.getInstance().init(config)
     }
+
+    companion object : SingletonHolder<CoreApp, Context>(::CoreApp)
 }
