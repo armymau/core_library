@@ -15,7 +15,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType
 import core_kt.singleton.SingletonHolder
 import core_kt.utils.TAG
 
-class CoreApp private constructor(context: Context) : Application() {
+class CoreApp : Application {
 
     var dimensions = IntArray(2)
     lateinit var displayDensity: String
@@ -23,6 +23,10 @@ class CoreApp private constructor(context: Context) : Application() {
     var isTabletTipology: Boolean = false
 
     lateinit var mRequestQueue: RequestQueue
+
+    constructor()
+
+    private constructor(context: Context) : this()
 
     companion object : SingletonHolder<CoreApp, Context>(::CoreApp)
 
@@ -54,6 +58,8 @@ class CoreApp private constructor(context: Context) : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        CoreApp(this)
         initImageLoader(applicationContext)
     }
 
