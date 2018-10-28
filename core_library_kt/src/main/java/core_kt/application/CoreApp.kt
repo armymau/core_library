@@ -14,7 +14,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType
 import core_kt.singleton.SingletonHolder
 import core_kt.utils.TAG
 
-class CoreApp : Application {
+open class CoreApp : Application {
 
     var dimensions = IntArray(2)
     lateinit var displayDensity: String
