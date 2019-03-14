@@ -5,10 +5,6 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.MultipartBuilder;
-import com.squareup.okhttp.RequestBody;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,6 +15,10 @@ import java.util.List;
 import java.util.Map;
 
 import core_kt.connection.model.GenericResponse;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static com.android.volley.VolleyLog.TAG;
 import static core_kt.connection.model.CacheManagerKt.getCachedObjectForRequest;
@@ -53,9 +53,9 @@ public class ServiceManager <T> extends ProgressAsyncTask {
     private int http_method;
     private String methodName;
     private HashMap<String, String> authorizations;
-    private MultipartBuilder formEncodingBuilder;
+    private MultipartBody.Builder formEncodingBuilder;
 
-    public ServiceManager(String methodName, int http_method, Activity activity, String endPointUrl, Map<String, Object> parameters, HashMap<String, String> authorizations, MultipartBuilder formEncodingBuilder, boolean shouldLoadCache, boolean isVisibleProgress, T clazz) {
+    public ServiceManager(String methodName, int http_method, Activity activity, String endPointUrl, Map<String, Object> parameters, HashMap<String, String> authorizations, MultipartBody.Builder formEncodingBuilder, boolean shouldLoadCache, boolean isVisibleProgress, T clazz) {
         super(activity, isVisibleProgress);
 
         this.methodName = methodName;
@@ -202,7 +202,7 @@ public class ServiceManager <T> extends ProgressAsyncTask {
     }
 
     public static RequestBody prepareParametersForPostMethod(Map<String, Object> parameters) {
-        FormEncodingBuilder formEncodingBuilder = new FormEncodingBuilder();
+        FormBody.Builder formEncodingBuilder = new FormBody.Builder();
         List<String> keys = new ArrayList<>(parameters.keySet());
         List<Object> values = new ArrayList<>(parameters.values());
 
@@ -218,10 +218,19 @@ public class ServiceManager <T> extends ProgressAsyncTask {
         return formBody;
     }
 
-    public static RequestBody prepareParametersForPostMethodWithMultipart(Map<String, Object> parameters, MultipartBuilder formEncodingBuilder) {
+    public static RequestBody prepareParametersForPostMethodWithMultipart(Map<String, Object> parameters, MultipartBody.Builder formEncodingBuilder) {
         RequestBody formBody = null;
+
+        if(formEncodingBuilder == null) {
+            formEncodingBuilder = new MultipartBody.Builder();
+        }
+
         try {
-            formBody = formEncodingBuilder.type(MultipartBuilder.FORM).build();
+            Iterator it = parameters.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                formBody = RequestBody.create(MultipartBody.FORM, (String) pair.getValue());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -231,8 +240,6 @@ public class ServiceManager <T> extends ProgressAsyncTask {
     public static RequestBody prepareParametersForPostMethodWithJsonType(Map<String, Object> parameters) {
         RequestBody formBody = null;
         try {
-            Gson gson = new Gson();
-
             MediaType mediaType = MediaType.parse("application/json");
 
             if(parameters.size() == 0) {

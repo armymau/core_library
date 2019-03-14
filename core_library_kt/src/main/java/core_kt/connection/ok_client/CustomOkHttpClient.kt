@@ -1,53 +1,64 @@
 package core_kt.connection.ok_client
 
 import android.util.Log
-import com.squareup.okhttp.*
 import core_kt.utils.TAG
 import core_kt.utils.isDebug
 import core_kt.utils.isSigned
+import okhttp3.*
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import java.util.*
 import java.util.concurrent.TimeUnit
-import javax.net.ssl.*
+import javax.net.ssl.KeyManager
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
-private lateinit var okHttpClient: OkHttpClient
+private lateinit var client: OkHttpClient.Builder
 private val HTTP_TIMEOUT = 120 * 1000 // milliseconds
 private val MEDIA_TYPE_PNG = MediaType.parse("image/png")
 
-fun getOkHttpClient(): OkHttpClient {
-    okHttpClient = OkHttpClient()
-    okHttpClient.setConnectTimeout(HTTP_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
-    okHttpClient.setReadTimeout(HTTP_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
-    okHttpClient.setWriteTimeout(HTTP_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
+fun getOkHttpClient(): OkHttpClient.Builder {
+
+    val okHttpClient = OkHttpClient.Builder()
+    okHttpClient.connectTimeout(HTTP_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
+    okHttpClient.readTimeout(HTTP_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
+    okHttpClient.writeTimeout(HTTP_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
 
     return okHttpClient
 }
 
-fun getOkHttpsClient(): OkHttpClient {
+fun getOkHttpsClient(): OkHttpClient.Builder {
 
-    okHttpClient = getOkHttpClient()
-    okHttpClient.hostnameVerifier = HostnameVerifier { _, _ -> true }
+    val okHttpClient = getOkHttpClient()
+    okHttpClient.hostnameVerifier { _, _ -> true }
 
-    val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+    val x509TrustManager = object : X509TrustManager {
         @Throws(CertificateException::class)
-        override fun checkClientTrusted(x509Certificates: Array<X509Certificate>, s: String) {
+        override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
         }
 
         @Throws(CertificateException::class)
-        override fun checkServerTrusted(x509Certificates: Array<X509Certificate>, s: String) {
+        override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
+            try {
+                chain[0].checkValidity()
+            } catch (e: Exception) {
+                throw CertificateException("Certificate not valid or trusted.")
+            }
         }
 
         override fun getAcceptedIssuers(): Array<X509Certificate?> {
             return arrayOfNulls(0)
         }
-    })
+    }
+    val trustAllCerts = arrayOf<TrustManager>(x509TrustManager)
 
     try {
         val sslContext = SSLContext.getInstance("TLS")
         sslContext.init(null as Array<KeyManager>?, trustAllCerts, SecureRandom())
-        okHttpClient.sslSocketFactory = sslContext.socketFactory
+        val sslSocketFactory = sslContext.socketFactory
+        okHttpClient.sslSocketFactory(sslSocketFactory, x509TrustManager)
     } catch (var2: Exception) {
         var2.printStackTrace()
     }
@@ -64,9 +75,9 @@ fun doGetRequest(methodName: String, url: String): String? {
 
         response =
                 if (url.contains("https://"))
-                    getOkHttpsClient().newCall(request).execute()
+                    getOkHttpsClient().build().newCall(request).execute()
                 else
-                    getOkHttpClient().newCall(request).execute()
+                    getOkHttpClient().build().newCall(request).execute()
 
         if (!isDebug && !isSigned) {
             Log.d(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
@@ -77,7 +88,7 @@ fun doGetRequest(methodName: String, url: String): String? {
             Log.d(TAG, "CODE         : \n" + response.code())
             Log.d(TAG, "RESPONSE     : \n" + response.toString())
         }
-        return response.body().string()
+        return response.body()?.string()
 
     } catch (e: Exception) {
         e.printStackTrace()
@@ -95,9 +106,9 @@ fun doPostRequest(methodName: String, url: String, formBody: RequestBody): Strin
 
         response =
                 if (url.contains("https://"))
-                    getOkHttpsClient().newCall(request).execute()
+                    getOkHttpsClient().build().newCall(request).execute()
                 else
-                    getOkHttpClient().newCall(request).execute()
+                    getOkHttpClient().build().newCall(request).execute()
 
         if (!isDebug && !isSigned) {
             Log.d(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
@@ -109,7 +120,7 @@ fun doPostRequest(methodName: String, url: String, formBody: RequestBody): Strin
             Log.d(TAG, "CODE         : \n" + response.code())
             Log.d(TAG, "RESPONSE     : \n" + response.toString())
         }
-        return response.body().string()
+        return response.body()?.string()
 
     } catch (e: Exception) {
         e.printStackTrace()
@@ -128,9 +139,9 @@ fun doGetRequestWithHeader(methodName: String, url: String, authorization: Strin
 
         response =
                 if (url.contains("https://"))
-                    getOkHttpsClient().newCall(request).execute()
+                    getOkHttpsClient().build().newCall(request).execute()
                 else
-                    getOkHttpClient().newCall(request).execute()
+                    getOkHttpClient().build().newCall(request).execute()
 
         if (!isDebug && !isSigned) {
             Log.d(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
@@ -141,7 +152,7 @@ fun doGetRequestWithHeader(methodName: String, url: String, authorization: Strin
             Log.d(TAG, "CODE         : \n" + response.code())
             Log.d(TAG, "RESPONSE     : \n" + response.toString())
         }
-        return response.body().string()
+        return response.body()?.string()
 
     } catch (e: Exception) {
         e.printStackTrace()
@@ -163,9 +174,9 @@ fun doGetRequestWithMultiHeader(methodName: String, url: String, authorizations:
 
         response =
                 if (url.contains("https://"))
-                    getOkHttpsClient().newCall(request.build()).execute()
+                    getOkHttpsClient().build().newCall(request.build()).execute()
                 else
-                    getOkHttpClient().newCall(request.build()).execute()
+                    getOkHttpClient().build().newCall(request.build()).execute()
 
         if (!isDebug && !isSigned) {
             Log.d(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
@@ -176,7 +187,7 @@ fun doGetRequestWithMultiHeader(methodName: String, url: String, authorizations:
             Log.d(TAG, "CODE         : \n" + response.code())
             Log.d(TAG, "RESPONSE     : \n" + response.toString())
         }
-        return response.body().string()
+        return response.body()?.string()
 
     } catch (e: Exception) {
         e.printStackTrace()
@@ -198,9 +209,9 @@ fun doPostRequestWithMultiHeader(methodName: String, url: String, authorizations
 
         response =
                 if (url.contains("https://"))
-                    getOkHttpsClient().newCall(request.build()).execute()
+                    getOkHttpsClient().build().newCall(request.build()).execute()
                 else
-                    getOkHttpClient().newCall(request.build()).execute()
+                    getOkHttpClient().build().newCall(request.build()).execute()
 
         if (!isDebug && !isSigned) {
             Log.d(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
@@ -211,7 +222,7 @@ fun doPostRequestWithMultiHeader(methodName: String, url: String, authorizations
             Log.d(TAG, "CODE         : \n" + response.code())
             Log.d(TAG, "RESPONSE     : \n" + response.toString())
         }
-        return response.body().string()
+        return response.body()?.string()
 
     } catch (e: Exception) {
         e.printStackTrace()
@@ -229,9 +240,9 @@ fun doPostRequestWithMultipart(methodName: String, url: String, formBody: Reques
 
         response =
                 if (url.contains("https://"))
-                    getOkHttpsClient().newCall(request).execute()
+                    getOkHttpsClient().build().newCall(request).execute()
                 else
-                    getOkHttpClient().newCall(request).execute()
+                    getOkHttpClient().build().newCall(request).execute()
 
         if (!isDebug && !isSigned) {
             Log.d(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
@@ -243,7 +254,7 @@ fun doPostRequestWithMultipart(methodName: String, url: String, formBody: Reques
             Log.d(TAG, "CODE         : \n" + response.code())
             Log.d(TAG, "RESPONSE     : \n" + response.toString())
         }
-        return response.body().string()
+        return response.body()?.string()
 
     } catch (e: Exception) {
         e.printStackTrace()
