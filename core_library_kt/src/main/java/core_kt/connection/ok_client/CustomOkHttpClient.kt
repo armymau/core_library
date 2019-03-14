@@ -12,11 +12,12 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.*
 
-private var okHttpClient: OkHttpClient = OkHttpClient()
-private val HTTP_TIMEOUT = 60 * 1000 // milliseconds
+private lateinit var okHttpClient: OkHttpClient
+private val HTTP_TIMEOUT = 120 * 1000 // milliseconds
 private val MEDIA_TYPE_PNG = MediaType.parse("image/png")
 
 fun getOkHttpClient(): OkHttpClient {
+    okHttpClient = OkHttpClient()
     okHttpClient.setConnectTimeout(HTTP_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
     okHttpClient.setReadTimeout(HTTP_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
     okHttpClient.setWriteTimeout(HTTP_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
@@ -26,6 +27,7 @@ fun getOkHttpClient(): OkHttpClient {
 
 fun getOkHttpsClient(): OkHttpClient {
 
+    okHttpClient = getOkHttpClient()
     okHttpClient.hostnameVerifier = HostnameVerifier { _, _ -> true }
 
     val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
