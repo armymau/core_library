@@ -4,7 +4,10 @@ import android.util.Log
 import core_kt.utils.TAG
 import core_kt.utils.isDebug
 import core_kt.utils.isSigned
-import okhttp3.*
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -15,9 +18,7 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
-private lateinit var client: OkHttpClient.Builder
 private val HTTP_TIMEOUT = 120 * 1000 // milliseconds
-private val MEDIA_TYPE_PNG = MediaType.parse("image/png")
 
 fun getOkHttpClient(): OkHttpClient.Builder {
 
@@ -86,7 +87,7 @@ fun doGetRequest(methodName: String, url: String): String? {
             Log.d(TAG, url)
             Log.d(TAG, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
             Log.d(TAG, "CODE         : \n" + response.code())
-            Log.d(TAG, "RESPONSE     : \n" + response.toString())
+            Log.d(TAG, "RESPONSE     : \n$response")
         }
         return response.body()?.string()
 
@@ -118,7 +119,7 @@ fun doPostRequest(methodName: String, url: String, formBody: RequestBody): Strin
             Log.d(TAG, "PARAMETERS   : \n$formBody")
             Log.d(TAG, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
             Log.d(TAG, "CODE         : \n" + response.code())
-            Log.d(TAG, "RESPONSE     : \n" + response.toString())
+            Log.d(TAG, "RESPONSE     : \n$response")
         }
         return response.body()?.string()
 
@@ -150,7 +151,7 @@ fun doGetRequestWithHeader(methodName: String, url: String, authorization: Strin
             Log.d(TAG, url)
             Log.d(TAG, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
             Log.d(TAG, "CODE         : \n" + response.code())
-            Log.d(TAG, "RESPONSE     : \n" + response.toString())
+            Log.d(TAG, "RESPONSE     : \n$response")
         }
         return response.body()?.string()
 
@@ -185,7 +186,7 @@ fun doGetRequestWithMultiHeader(methodName: String, url: String, authorizations:
             Log.d(TAG, url)
             Log.d(TAG, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
             Log.d(TAG, "CODE         : \n" + response.code())
-            Log.d(TAG, "RESPONSE     : \n" + response.toString())
+            Log.d(TAG, "RESPONSE     : \n$response")
         }
         return response.body()?.string()
 
@@ -220,7 +221,7 @@ fun doPostRequestWithMultiHeader(methodName: String, url: String, authorizations
             Log.d(TAG, url)
             Log.d(TAG, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
             Log.d(TAG, "CODE         : \n" + response.code())
-            Log.d(TAG, "RESPONSE     : \n" + response.toString())
+            Log.d(TAG, "RESPONSE     : \n$response")
         }
         return response.body()?.string()
 
@@ -252,7 +253,7 @@ fun doPostRequestWithMultipart(methodName: String, url: String, formBody: Reques
             Log.d(TAG, "PARAMETERS   : \n$formBody")
             Log.d(TAG, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
             Log.d(TAG, "CODE         : \n" + response.code())
-            Log.d(TAG, "RESPONSE     : \n" + response.toString())
+            Log.d(TAG, "RESPONSE     : \n$response")
         }
         return response.body()?.string()
 

@@ -4,12 +4,13 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
+    flavorDimensions "CoreLibKt"
 
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 34
-        versionName "1.35"
+        versionCode 35
+        versionName "1.36"
         multiDexEnabled true
     }
     buildTypes {
@@ -25,9 +26,17 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
+    productFlavors {
+        develop {
+            flavorDimensions "CoreLibKt"
+        }
+        production {
+            flavorDimensions "CoreLibKt"
+        }
+    }
 }
 
-def supportVersion = "28.0.0-rc01"
+def supportVersion = "28.0.0"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

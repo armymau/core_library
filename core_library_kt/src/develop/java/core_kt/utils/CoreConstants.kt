@@ -1,11 +1,9 @@
 package core_kt.utils
 
-import java.util.regex.Pattern
-
-const val TAG = ">>> CORE"
 const val isDebug = true
 const val isSigned = false
 
+const val TAG = ">>> CORE"
 const val HTTP_TIMEOUT = 15 * 1000    // milliseconds
 const val LONG_DELAY = 5000          // 3.5 seconds
 const val SHORT_DELAY = 2000         // 2 seconds
