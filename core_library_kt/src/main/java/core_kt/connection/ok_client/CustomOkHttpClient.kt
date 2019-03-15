@@ -4,7 +4,10 @@ import android.util.Log
 import core_kt.utils.TAG
 import core_kt.utils.isDebug
 import core_kt.utils.isSigned
-import okhttp3.*
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -15,9 +18,7 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
-private lateinit var client: OkHttpClient.Builder
 private val HTTP_TIMEOUT = 120 * 1000 // milliseconds
-private val MEDIA_TYPE_PNG = MediaType.parse("image/png")
 
 fun getOkHttpClient(): OkHttpClient.Builder {
 
@@ -41,11 +42,6 @@ fun getOkHttpsClient(): OkHttpClient.Builder {
 
         @Throws(CertificateException::class)
         override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
-            try {
-                chain[0].checkValidity()
-            } catch (e: Exception) {
-                throw CertificateException("Certificate not valid or trusted.")
-            }
         }
 
         override fun getAcceptedIssuers(): Array<X509Certificate?> {
