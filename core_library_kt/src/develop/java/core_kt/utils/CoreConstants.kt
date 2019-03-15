@@ -1,5 +1,7 @@
 package core_kt.utils
 
+import java.util.regex.Pattern
+
 const val isDebug = true
 const val isSigned = false
 
