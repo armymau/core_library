@@ -1,9 +1,11 @@
 apply plugin:'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.github.dcendents.android-maven'
 
 android {
     compileSdkVersion 28
+    flavorDimensions "CoreKt"
 
     defaultConfig {
         minSdkVersion 15
@@ -25,6 +27,16 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
+    productFlavors {
+        develop {
+            flavorDimensions "CoreKt"
+        }
+        production {
+            flavorDimensions "CoreKt"
+        }
+    }
+
+    group='com.github.CoreKt'
 }
 
 def supportVersion = "28.0.0-rc01"
