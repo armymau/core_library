@@ -44,10 +44,10 @@ android {
             flavorDimensions "CoreKt"
         }
     }
-    defaultPublishConfig "productionRelease"
+    //defaultPublishConfig "productionRelease"
 }
 
-group='com.github.CoreKt'
+//group='com.github.CoreKt'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
