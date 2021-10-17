@@ -42,7 +42,7 @@ fun getOkHttpsClient(): OkHttpClient.Builder {
 
         @Throws(CertificateException::class)
         override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
-            chain[0].checkValidity()
+            //chain[0].checkValidity()
         }
 
         override fun getAcceptedIssuers(): Array<X509Certificate?> {
