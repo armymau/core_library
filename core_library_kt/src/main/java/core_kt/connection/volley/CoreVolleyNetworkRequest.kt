@@ -36,7 +36,7 @@ class CoreVolleyNetworkRequest(
                     if (result != null) {
                         volleyCallback.onSuccess(result)
                     } else {
-                        volleyCallback.onFailed(result)
+                        result?.let { volleyCallback.onFailed(it) }
                     }
                 }
             }

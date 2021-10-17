@@ -3,9 +3,9 @@ package core_kt.fragment
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.FragmentActivity
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 
 class ProgressDialogFragment : DialogFragment() {
 
@@ -13,7 +13,7 @@ class ProgressDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         pd = ProgressDialog(activity)
-        pd.setMessage(getString(arguments!!.getInt(KEY_MSG)))
+        pd.setMessage(getString(arguments?.getInt(KEY_MSG) ?: -1))
         isCancelable = false
         pd.setCancelable(false)
         pd.setCanceledOnTouchOutside(false)

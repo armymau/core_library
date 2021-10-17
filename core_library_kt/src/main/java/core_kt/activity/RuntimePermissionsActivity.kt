@@ -6,12 +6,12 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import armymau.it.core_library.R
+import com.google.android.material.snackbar.Snackbar
 import core_kt.utils.CHECK_PERMISSIONS_REQUEST_CODE
 
 abstract class RuntimePermissionsActivity : AppCompatActivity() {
@@ -30,7 +30,7 @@ abstract class RuntimePermissionsActivity : AppCompatActivity() {
         shouldShowRequestPermissionRationale = false
 
         for (permission in requestedPermissions) {
-            permissionCheck = permissionCheck + ContextCompat.checkSelfPermission(this, permission)
+            permissionCheck += ContextCompat.checkSelfPermission(this, permission)
             shouldShowRequestPermissionRationale = shouldShowRequestPermissionRationale || ActivityCompat.shouldShowRequestPermissionRationale(this, permission)
         }
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {

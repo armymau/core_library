@@ -15,22 +15,20 @@ fun isNetworkAvailable(context: Context): Boolean {
             val networks = connectivity.allNetworks
             var networkInfo: NetworkInfo
             for (mNetwork in networks) {
-                networkInfo = connectivity.getNetworkInfo(mNetwork)
+                networkInfo = connectivity.getNetworkInfo(mNetwork)!!
                 if (networkInfo.state == NetworkInfo.State.CONNECTED &&
-                                connectivity.activeNetworkInfo.isAvailable &&
-                                connectivity.activeNetworkInfo.isConnected) {
+                    connectivity.activeNetworkInfo?.isAvailable == true &&
+                    connectivity.activeNetworkInfo?.isConnected == true) {
                     return true
                 }
             }
         } else {
             val info = connectivity.allNetworkInfo
-            if (info != null) {
-                for (anInfo in info) {
-                    if (anInfo.state == NetworkInfo.State.CONNECTED &&
-                            connectivity.activeNetworkInfo.isAvailable &&
-                            connectivity.activeNetworkInfo.isConnected) {
-                        return true
-                    }
+            for (anInfo in info) {
+                if (anInfo.state == NetworkInfo.State.CONNECTED &&
+                    connectivity.activeNetworkInfo?.isAvailable == true &&
+                    connectivity.activeNetworkInfo?.isConnected == true) {
+                    return true
                 }
             }
         }

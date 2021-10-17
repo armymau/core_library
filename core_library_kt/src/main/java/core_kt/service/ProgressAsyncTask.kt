@@ -3,9 +3,9 @@ package core_kt.service
 import android.app.Activity
 import android.content.Context
 import android.os.AsyncTask
-import android.support.v4.app.FragmentActivity
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.FragmentActivity
 
 import armymau.it.core_library.R
 import core_kt.fragment.ProgressDialogFragment

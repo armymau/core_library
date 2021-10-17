@@ -5,18 +5,21 @@ import android.content.Context
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
+import kotlin.math.pow
+import kotlin.math.sqrt
+
+const val TABLET_MIN_DIAGONAL_DEVICE = 6.79
 
 fun getDiagonalScreenDevice(context: Activity): Double {
-    val dm = DisplayMetrics()
-    context.windowManager.defaultDisplay.getMetrics(dm)
+    val dm = context.resources.displayMetrics
     val width = dm.widthPixels
     val height = dm.heightPixels
     val dens = dm.densityDpi
     val wi = width.toDouble() / dens.toDouble()
     val hi = height.toDouble() / dens.toDouble()
-    val x = Math.pow(wi, 2.0)
-    val y = Math.pow(hi, 2.0)
-    val screenInches = Math.sqrt(x + y)
+    val x = wi.pow(2.0)
+    val y = hi.pow(2.0)
+    val screenInches = sqrt(x + y)
 
     Log.e(TAG, "Screen diagonal size : $screenInches")
     return screenInches
@@ -24,8 +27,7 @@ fun getDiagonalScreenDevice(context: Activity): Double {
 
 fun getScreenDimension(context: Activity): IntArray {
     val dim = IntArray(2)
-    val displaymetrics = DisplayMetrics()
-    context.windowManager.defaultDisplay.getMetrics(displaymetrics)
+    val displaymetrics = context.resources.displayMetrics
     val height = displaymetrics.heightPixels
     val width = displaymetrics.widthPixels
     dim[0] = width
@@ -36,24 +38,22 @@ fun getScreenDimension(context: Activity): IntArray {
 }
 
 fun isTabletDevice(activityContext: Context): Boolean {
-    try {
+    return try {
         val dm = activityContext.resources.displayMetrics
         val screenWidth = dm.widthPixels / dm.xdpi
         val screenHeight = dm.heightPixels / dm.ydpi
-        val size = Math.sqrt(Math.pow(screenWidth.toDouble(), 2.0) + Math.pow(screenHeight.toDouble(), 2.0))
+        val size = sqrt(screenWidth.toDouble().pow(2.0) + screenHeight.toDouble().pow(2.0))
 
-        Log.e(TAG, "Is tablet device : " + (size >= 6.9))
-        return size >= 6.9
+        Log.e(TAG, "Is tablet device : " + (size >= TABLET_MIN_DIAGONAL_DEVICE))
+        size >= TABLET_MIN_DIAGONAL_DEVICE
     } catch (t: Exception) {
         Log.e(TAG, "Failed to compute screen size", t)
-        return false
+        false
     }
-
 }
 
 fun getDisplayDensity(context: Activity): String {
-    val dm = DisplayMetrics()
-    context.windowManager.defaultDisplay.getMetrics(dm)
+    val dm = context.resources.displayMetrics
     val dens = dm.densityDpi
 
     /*
@@ -64,20 +64,15 @@ fun getDisplayDensity(context: Activity): String {
     xxhdpi (extra-extra-high) ~480dpi
     xxxhdpi (extra-extra-extra-high) ~640dpi
      */
-    var dispDens: String
 
-    if (dens < 160)
-        dispDens = "ldpi"
-    else if (dens < 240)
-        dispDens = "mdpi"
-    else if (dens < 320)
-        dispDens = "hdpi"
-    else if (dens < 480)
-        dispDens = "xhdpi"
-    else if (dens < 640)
-        dispDens = "xxhdpi"
-    else
-        dispDens = "xxxhdpi"
+    val dispDens: String = when {
+        dens < 160 -> "ldpi"
+        dens < 240 -> "mdpi"
+        dens < 320 -> "hdpi"
+        dens < 480 -> "xhdpi"
+        dens < 640 -> "xxhdpi"
+        else -> "xxxhdpi"
+    }
 
     Log.e(TAG, "Display density : $dispDens")
 
